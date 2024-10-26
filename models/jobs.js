@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const slugify = require("slugify");
-const geoCoder = require("../util/geocoder");
+const geoCoder = require("../utils/geocoder");
 
 const jobSchema = new mongoose.Schema({
   title: {
@@ -45,7 +45,7 @@ const jobSchema = new mongoose.Schema({
   },
   industry: {
     type: [String],
-    required: true,
+    required: [true,'Please enter industry for this job'],
     enum: {
       values: [
         "Business",
@@ -60,7 +60,7 @@ const jobSchema = new mongoose.Schema({
   },
   jobType: {
     type: String,
-    required: true,
+    required: [true,'Please enter Job Type for this job'],
     enum: {
       values: ["Permanent", "Temporary", "Internship"],
       message: "Please select correct options for job type.",
@@ -68,7 +68,7 @@ const jobSchema = new mongoose.Schema({
   },
   minEducation: {
     type: String,
-    required: true,
+    required: [true,'Please enter min Education for this job'],
     enum: {
       values: ["Bachelors", "Masters", "PhD"],
       message: "Please select correct options for Education.",
@@ -80,7 +80,7 @@ const jobSchema = new mongoose.Schema({
   },
   experience: {
     type: String,
-    required: true,
+    required: [true,'Please enter experience for this job'],
     enum: {
       values: [
         "No Experience",
