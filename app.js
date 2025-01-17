@@ -1,12 +1,17 @@
 const express = require('express');
 const app = express();
-const dotenv = require('dotenv')
+
+const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
+
 //config env
 dotenv.config({path:'./config/config.env'})
 
 const connectDatabase = require('./config/database')
 const errorMiddleware = require('./middleware/errors')
 const ErrorHandler = require('./utils/errorHandler')
+const sendToken = require('./utils/jwtToken')
+
 //handling uncaught exception
 process.on('uncaughtException',err =>{
     console.log(`Error: ${err.message}`);
@@ -19,11 +24,16 @@ connectDatabase();
 
 //bodyparse
 app.use(express.json());
+
+//set Cookie parser
+app.use(cookieParser());
+
 //routes
 const jobs = require('./routes/jobs');
+const auth = require('./routes/auth');
 
 app.use('/api/v1',jobs);
-
+app.use('/api/v1',auth);
 //unhandled routes
 app.all('*',(req,res,next) =>{
     next(new ErrorHandler(`${req.originalUrl} route not found`, 404))
@@ -32,7 +42,7 @@ app.all('*',(req,res,next) =>{
 //middleware
 app.use(errorMiddleware)
 
-console.log(process.env.NODE_ENV)
+
 const PORT = process.env.PORT;
 const server = app.listen(PORT,()=>{
     console.log(`Server started on port ${process.env.PORT} in ${process.env.NODE_ENV} mode.` );
