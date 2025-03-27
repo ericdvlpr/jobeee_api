@@ -16,7 +16,7 @@ class APIFilters{
         let queryStr = JSON.stringify(queryCopy);
         queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`)
 
-        console.log(queryStr)
+        
         this.query = this.query.find(JSON.parse(queryStr))
         return this;
     }
@@ -24,13 +24,13 @@ class APIFilters{
 
     sort(){
         if(this.queryStr.sort){
-            const sortBy = this.queryStr.split(',').join('');
+            const sortBy = this.queryStr.sort.split(',').join(' ');
             this.query = this.query.sort(sortBy);
         }else{
             this.query = this.query.sort('-postingDate');
         }
 
-        return this
+        return this;
     }
 
     limitFields(){
